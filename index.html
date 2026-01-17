@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MÉXICO BÉLICO LÍRICA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body class="bg-black text-white">
+    <div id="root"></div>
+
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function App() {
+            const [tema, setTema] = useState('');
+            const [resultado, setResultado] = useState({ letra: '', beat: '' });
+            const [loading, setLoading] = useState(false);
+
+            const generarTodo = async () => {
+                if (!tema) return alert("Escribe el tema, carnal");
+                setLoading(true);
+                
+                try {
+                    // Aquí va tu conexión a la API (Claude o GPT)
+                    // Por ahora simularé la respuesta con la estructura que pediste
+                    const promptSistema = `Eres experto en Rap Malandro (Neto Reyno, Pinche Mara, Lefty SM).
+                    Genera: 
+                    1. Letra cruda de barrio.
+                    2. Un 'PROMPT PARA EL BEAT' detallado (Instrumental, BPM, instrumentos).`;
+
+                    // Simulación de respuesta completa
+                    setTimeout(() => {
+                        setResultado({
+                            letra: `[VERSO 1 - Estilo Neto Reyno]\nCaminando por la zona, donde el sol no brilla igual...\n[CORO - Estilo Lefty SM]\nSoy de barrio, soy de calle, mi bandera es la lealtad...`,
+                            beat: `PROMPT PARA SUNO/UDIO: Hardcore Mexican Rap Beat, 92 BPM, dark piano, heavy boom bap drums, deep sub-bass, G-Funk whistle, street atmosphere, aggressive but melancholic.`
+                        });
+                        setLoading(false);
+                    }, 2000);
+                } catch (e) { alert("Error al conectar"); setLoading(false); }
+            };
+
+            return (
+                <div className="p-4 max-w-lg mx-auto">
+                    <h1 className="text-3xl font-black text-red-600 italic mb-6">MÉXICO BÉLICO</h1>
+                    
+                    <textarea 
+                        className="w-full bg-zinc-900 border border-zinc-700 p-4 rounded-xl mb-4 h-32"
+                        placeholder="¿De qué trata el jale hoy?"
+                        value={tema}
+                        onChange={(e) => setTema(e.target.value)}
+                    />
+
+                    <button 
+                        onClick={generarTodo}
+                        className="w-full bg-red-600 py-4 rounded-xl font-bold uppercase mb-8"
+                    >
+                        {loading ? "Cocinando el jale..." : "Generar Letra y Beat"}
+                    </button>
+
+                    {resultado.letra && (
+                        <div className="space-y-6">
+                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+                                <h2 className="text-red-500 font-bold mb-2 uppercase text-sm">Letra de la Clika</h2>
+                                <pre className="whitespace-pre-wrap text-sm">{resultado.letra}</pre>
+                            </div>
+                            
+                            <div className="bg-blue-900/30 p-4 rounded-xl border border-blue-500/50">
+                                <h2 className="text-blue-400 font-bold mb-2 uppercase text-sm">Prompt para el Beat (Cópialo en Suno/Udio)</h2>
+                                <p className="text-sm italic">{resultado.beat}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
