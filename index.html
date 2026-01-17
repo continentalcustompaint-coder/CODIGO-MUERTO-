@@ -1,87 +1,363 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MÉXICO BÉLICO LÍRICA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="manifest.json">
-</head>
-<body class="bg-black text-white">
-    <div id="root"></div>
+import React, { useState } from 'react';
+import { Mic, Zap, Book, TrendingUp, AlertCircle } from 'lucide-react';
 
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+const LiricistaSupremoApp = () => {
+  const [tema, setTema] = useState('');
+  const [estilo, setEstilo] = useState('fusion_suprema');
+  const [letra, setLetra] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    <script type="text/babel">
-        const { useState } = React;
+  const estilos = {
+    fusion_suprema: { 
+      name: 'Fusión Suprema', 
+      desc: 'Nach + Chojin + SFDK + Malandro MX',
+      icon: Zap
+    },
+    conciencia_pura: { 
+      name: 'Conciencia Pura', 
+      desc: 'Filosófico y social',
+      icon: Book
+    },
+    malandro_mexicano: { 
+      name: 'Malandro Mexicano', 
+      desc: 'Cartel + C-Kan estilo calle',
+      icon: AlertCircle
+    },
+    batalla_freestyle: { 
+      name: 'Batalla/Freestyle', 
+      desc: 'Agresivo con punchlines',
+      icon: Mic
+    }
+  };
 
-        function App() {
-            const [tema, setTema] = useState('');
-            const [resultado, setResultado] = useState({ letra: '', beat: '' });
-            const [loading, setLoading] = useState(false);
+  const temasPredef = [
+    'Vigilancia digital y pérdida de privacidad',
+    'IA deshumanizando el trabajo creativo',
+    'Brecha económica global',
+    'Gentrificación destruyendo barrios',
+    'Crisis climática y negligencia corporativa',
+    'Tensiones migratorias México-EE.UU.'
+  ];
 
-            const generarTodo = async () => {
-                if (!tema) return alert("Escribe el tema, carnal");
-                setLoading(true);
-                
-                try {
-                    // Aquí va tu conexión a la API (Claude o GPT)
-                    // Por ahora simularé la respuesta con la estructura que pediste
-                    const promptSistema = `Eres experto en Rap Malandro (Neto Reyno, Pinche Mara, Lefty SM).
-                    Genera: 
-                    1. Letra cruda de barrio.
-                    2. Un 'PROMPT PARA EL BEAT' detallado (Instrumental, BPM, instrumentos).`;
+  const generarLetra = async () => {
+    if (!tema.trim()) {
+      alert('¡Escribe un tema, carnal!');
+      return;
+    }
 
-                    // Simulación de respuesta completa
-                    setTimeout(() => {
-                        setResultado({
-                            letra: `[VERSO 1 - Estilo Neto Reyno]\nCaminando por la zona, donde el sol no brilla igual...\n[CORO - Estilo Lefty SM]\nSoy de barrio, soy de calle, mi bandera es la lealtad...`,
-                            beat: `PROMPT PARA SUNO/UDIO: Hardcore Mexican Rap Beat, 92 BPM, dark piano, heavy boom bap drums, deep sub-bass, G-Funk whistle, street atmosphere, aggressive but melancholic.`
-                        });
-                        setLoading(false);
-                    }, 2000);
-                } catch (e) { alert("Error al conectar"); setLoading(false); }
-            };
+    setLoading(true);
+    setLetra('');
 
-            return (
-                <div className="p-4 max-w-lg mx-auto">
-                    <h1 className="text-3xl font-black text-red-600 italic mb-6">MÉXICO BÉLICO</h1>
-                    
-                    <textarea 
-                        className="w-full bg-zinc-900 border border-zinc-700 p-4 rounded-xl mb-4 h-32"
-                        placeholder="¿De qué trata el jale hoy?"
-                        value={tema}
-                        onChange={(e) => setTema(e.target.value)}
-                    />
+    try {
+      const systemPrompts = {
+        fusion_suprema: `Eres el LIRICISTA SUPREMO - Experto en rap hispano de élite.
 
-                    <button 
-                        onClick={generarTodo}
-                        className="w-full bg-red-600 py-4 rounded-xl font-bold uppercase mb-8"
-                    >
-                        {loading ? "Cocinando el jale..." : "Generar Letra y Beat"}
-                    </button>
+DNA LÍRICO:
+• Nach: Rimas esdrújulas, metáforas filosóficas, vocabulario extenso
+• El Chojin: Claridad conceptual, crítica social directa
+• SFDK/Zatu: Flow callejero, ingenio punzante
+• Malandro MX: Jerga (rifar, clika, barrio, vato), código de calle
 
-                    {resultado.letra && (
-                        <div className="space-y-6">
-                            <div className="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-                                <h2 className="text-red-500 font-bold mb-2 uppercase text-sm">Letra de la Clika</h2>
-                                <pre className="whitespace-pre-wrap text-sm">{resultado.letra}</pre>
-                            </div>
-                            
-                            <div className="bg-blue-900/30 p-4 rounded-xl border border-blue-500/50">
-                                <h2 className="text-blue-400 font-bold mb-2 uppercase text-sm">Prompt para el Beat (Cópialo en Suno/Udio)</h2>
-                                <p className="text-sm italic">{resultado.beat}</p>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        }
+TÉCNICA OBLIGATORIA:
+- Rimas consonantes + internas cada 2 líneas
+- Métrica: 16 barras por verso, 4/4 time
+- Mezcla lenguaje culto + jerga mexicana natural
+- Punchlines memorables cada 4-6 barras
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
-</body>
-</html>
+ESTRUCTURA:
+[INTRO] - 4 barras gancho
+[VERSO 1] - 16 barras técnico/filosófico
+[ESTRIBILLO] - 8 barras emocional/memorable
+[VERSO 2] - 16 barras agresivo/malandro
+[VERSO 3] - 16 barras resolución épica
+[OUTRO] - 4 barras cierre contundente
+
+PROHIBIDO: Rimas pobres, clichés, lenguaje plano.`,
+
+        conciencia_pura: `Eres un POETA URBANO especializado en conciencia social.
+
+Estilo: Nach + El Chojin (profundidad filosófica + claridad)
+- Vocabulario amplio y preciso
+- Rimas multisilábicas complejas
+- Crítica social fundamentada
+- Metáforas que hacen pensar
+- Referencias históricas/filosóficas
+
+Estructura narrativa clara con mensaje potente.`,
+
+        malandro_mexicano: `Eres un MC DE BARRIO auténtico, sin poses.
+
+Estilo: Cartel de Santa + C-Kan + código de calle
+- Jerga mexicana NATURAL (no forzada)
+- Realidad cruda sin filtros
+- Flow agresivo pero consciente
+- Referencias a la vida de barrio
+- Lealtad, lucha, supervivencia
+
+Que se sienta REAL, no actuado.`,
+
+        batalla_freestyle: `Eres un ASESINO LÍRICO en modo batalla.
+
+Técnica letal:
+- Punchlines cada 4 barras (MÍNIMO)
+- Dobles y triples sentidos
+- Metáforas violentas pero inteligentes
+- Flow cambiante (lento→rápido→breakdown)
+- Destrucción lírica sin piedad
+
+Agresión controlada + técnica impecable.`
+      };
+
+      const prompt = `TEMA: ${tema}
+
+INSTRUCCIONES:
+1. Crea una letra COMPLETA con la estructura indicada
+2. Mínimo 3 rimas multisilábicas por verso
+3. Incluye referencias culturales (cine, historia, literatura)
+4. Jerga mexicana integrada naturalmente
+5. Al menos 1 punchline memorable por verso
+6. Conecta lo personal con lo social/político
+
+FORMATO DE SALIDA:
+Usa etiquetas claras: [INTRO], [VERSO 1], [ESTRIBILLO], etc.
+
+GENERA LA LÍRICA AHORA.`;
+
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4000,
+          temperature: 0.9,
+          messages: [
+            {
+              role: 'user',
+              content: `${systemPrompts[estilo]}\n\n${prompt}`
+            }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const letraGenerada = data.content[0].text;
+      
+      setLetra(letraGenerada);
+    } catch (error) {
+      setLetra(`❌ Error generando la letra: ${error.message}\n\nIntenta de nuevo, carnal.`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const IconComponent = estilos[estilo].icon;
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8 pt-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Mic className="w-12 h-12 text-purple-400" />
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
+              LIRICISTA SUPREMO
+            </h1>
+          </div>
+          <p className="text-gray-400 text-lg">Generador de Rap Conciencia + Malandro | Nivel Elite</p>
+        </div>
+
+        {/* Panel Principal */}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* Columna Izquierda - Controles */}
+          <div className="bg-gray-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/30">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <TrendingUp className="w-6 h-6 text-purple-400" />
+              Configuración
+            </h2>
+
+            {/* Selector de Estilo */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold mb-3 text-purple-300">
+                ESTILO LÍRICO
+              </label>
+              <div className="grid grid-cols-1 gap-2">
+                {Object.entries(estilos).map(([key, val]) => (
+                  <button
+                    key={key}
+                    onClick={() => setEstilo(key)}
+                    className={`p-3 rounded-lg border-2 transition-all text-left ${
+                      estilo === key
+                        ? 'border-purple-500 bg-purple-500/20'
+                        : 'border-gray-600 hover:border-purple-400 bg-gray-700/30'
+                    }`}
+                  >
+                    <div className="flex items-start gap-2">
+                      <val.icon className="w-5 h-5 mt-1 flex-shrink-0" />
+                      <div>
+                        <div className="font-bold">{val.name}</div>
+                        <div className="text-xs text-gray-400">{val.desc}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Temas Predefinidos */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold mb-3 text-purple-300">
+                TEMAS SUGERIDOS
+              </label>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {temasPredef.map((t, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setTema(t)}
+                    className="w-full text-left p-2 rounded bg-gray-700/50 hover:bg-purple-600/30 border border-gray-600 hover:border-purple-400 transition-all text-sm"
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Input de Tema */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold mb-2 text-purple-300">
+                TU TEMA PERSONALIZADO
+              </label>
+              <textarea
+                value={tema}
+                onChange={(e) => setTema(e.target.value)}
+                placeholder="Escribe el tema de tu letra..."
+                className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 outline-none resize-none"
+                rows="4"
+              />
+            </div>
+
+            {/* Botón Generar */}
+            <button
+              onClick={generarLetra}
+              disabled={loading}
+              className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:from-gray-600 disabled:to-gray-700 rounded-lg font-bold text-lg transition-all transform hover:scale-105 disabled:scale-100 shadow-lg"
+            >
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                  GENERANDO...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  GENERAR LÍRICA
+                </span>
+              )}
+            </button>
+          </div>
+
+          {/* Columna Derecha - Preview del Estilo */}
+          <div className="bg-gray-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/30">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <IconComponent className="w-6 h-6 text-purple-400" />
+              {estilos[estilo].name}
+            </h2>
+            
+            <div className="space-y-4 text-sm text-gray-300">
+              {estilo === 'fusion_suprema' && (
+                <>
+                  <p className="font-semibold text-purple-300">EL ESTILO MÁS COMPLETO:</p>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Rimas multisilábicas y esdrújulas</li>
+                    <li>Metáforas filosóficas profundas</li>
+                    <li>Flow callejero con ingenio</li>
+                    <li>Jerga mexicana natural</li>
+                    <li>Crítica social fundamentada</li>
+                  </ul>
+                  <p className="italic text-purple-200">
+                    "Mezcla perfecta de Nach, Chojin, SFDK y código de barrio mexicano"
+                  </p>
+                </>
+              )}
+              
+              {estilo === 'conciencia_pura' && (
+                <>
+                  <p className="font-semibold text-purple-300">RAP CON MENSAJE:</p>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Vocabulario amplio y preciso</li>
+                    <li>Referencias históricas/filosóficas</li>
+                    <li>Crítica social profunda</li>
+                    <li>Metáforas que hacen pensar</li>
+                    <li>Claridad en el mensaje</li>
+                  </ul>
+                  <p className="italic text-purple-200">
+                    "Para cuando quieres despertar conciencias"
+                  </p>
+                </>
+              )}
+              
+              {estilo === 'malandro_mexicano' && (
+                <>
+                  <p className="font-semibold text-purple-300">DIRECTO DE LA CALLE:</p>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Jerga auténtica del barrio</li>
+                    <li>Realidad sin filtros</li>
+                    <li>Flow agresivo y consciente</li>
+                    <li>Código de lealtad y honor</li>
+                    <li>Vivencias reales</li>
+                  </ul>
+                  <p className="italic text-purple-200">
+                    "Que se sienta la calle, no poses"
+                  </p>
+                </>
+              )}
+              
+              {estilo === 'batalla_freestyle' && (
+                <>
+                  <p className="font-semibold text-purple-300">MODO DESTRUCCIÓN:</p>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Punchlines letales cada 4 barras</li>
+                    <li>Dobles y triples sentidos</li>
+                    <li>Flow cambiante dinámico</li>
+                    <li>Metáforas violentas inteligentes</li>
+                    <li>Técnica impecable</li>
+                  </ul>
+                  <p className="italic text-purple-200">
+                    "Para cuando quieres acabar con todo"
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Resultado */}
+        {letra && (
+          <div className="bg-gray-800/50 backdrop-blur rounded-lg p-6 border border-purple-500/30">
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <Book className="w-6 h-6 text-purple-400" />
+              Lírica Generada
+            </h2>
+            <div className="bg-black/50 p-6 rounded-lg border border-gray-700 max-h-96 overflow-y-auto">
+              <pre className="whitespace-pre-wrap font-mono text-sm text-gray-100 leading-relaxed">
+                {letra}
+              </pre>
+            </div>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(letra);
+                alert('¡Lírica copiada al portapapeles!');
+              }}
+              className="mt-4 px-6 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg font-semibold transition-all"
+            >
+              📋 Copiar Letra
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default LiricistaSupremoApp;
